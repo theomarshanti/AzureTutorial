@@ -5,14 +5,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PsHelloAzureApp.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace PsHelloAzureApp.Controllers
 {
     public class HomeController : Controller
     {
+        IConfiguration configuration;
+
+        public HomeController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var model = this.configuration["Greeting"];
+            return View("Index", model);
         }
 
         public IActionResult About()
