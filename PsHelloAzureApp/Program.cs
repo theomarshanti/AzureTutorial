@@ -7,6 +7,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using PsHelloAzureApp.Data;
 
 namespace PsHelloAzureApp
 {
@@ -14,7 +17,18 @@ namespace PsHelloAzureApp
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var host = BuildWebHost(args);
+            MigrateDatabase(host);
+            host.Run();
+        }
+
+        public static void MigrateDatabase(IWebHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                context.Database.Migrate();
+            }
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
