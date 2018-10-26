@@ -35,7 +35,9 @@ namespace PsHelloAzureApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
+            //Have to add this for Dependency Injection
+            services.AddTransient<CourseStore>();
+            services.AddTransient<ImageStore>();
             services.AddMvc();
         }
 
